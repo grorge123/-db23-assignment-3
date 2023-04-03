@@ -28,6 +28,7 @@ import org.vanilladb.core.query.parse.ModifyData;
 import org.vanilladb.core.query.parse.Parser;
 import org.vanilladb.core.query.parse.QueryData;
 import org.vanilladb.core.storage.tx.Transaction;
+import org.vanilladb.core.query.algebra.ExplainPlan;
 
 /**
  * The object that executes SQL statements.
@@ -56,7 +57,13 @@ public class Planner {
 		Parser parser = new Parser(qry);
 		QueryData data = parser.queryCommand();
 		Verifier.verifyQueryData(data, tx);
-		return qPlanner.createPlan(data, tx);
+		Plan p;
+		if (data.isExplainSQL()) {
+			p = new ExplainPlan(qPlanner.createPlan(data, tx));
+		} else {
+			p = qPlanner.createPlan(data, tx);
+		}
+		return p;
 	}
 
 	/**
