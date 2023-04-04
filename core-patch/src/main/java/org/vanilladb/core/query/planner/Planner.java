@@ -57,12 +57,8 @@ public class Planner {
 		Parser parser = new Parser(qry);
 		QueryData data = parser.queryCommand();
 		Verifier.verifyQueryData(data, tx);
-		Plan p;
-		if (data.isExplainSQL()) {
-			p = new ExplainPlan(qPlanner.createPlan(data, tx));
-		} else {
-			p = qPlanner.createPlan(data, tx);
-		}
+		Plan p = qPlanner.createPlan(data, tx);
+		if (data.isExplainSQL()) p = new ExplainPlan(p);
 		return p;
 	}
 
