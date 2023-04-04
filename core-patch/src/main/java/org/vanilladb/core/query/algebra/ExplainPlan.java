@@ -7,15 +7,6 @@ import org.vanilladb.core.storage.metadata.statistics.Histogram;
 
 public class ExplainPlan implements Plan {
 	private Plan p;
-	private Schema dummy_schema;
-	private Histogram dummy_hist;
-    private long dummy_recordsOutput;
- 
-    /** Impl note:
-	 * It's for sure that ExplainPlan has no parent plan, 
-     * and no one will call for it's hist and schema.
-     * Therefore keeping them dummy is enough.
-	 */
 
 	/**
 	 * Creates a new explain node in the query tree, having nothing.
@@ -46,16 +37,16 @@ public class ExplainPlan implements Plan {
 
 	@Override
 	public Schema schema() {
-		return dummy_schema;
+		return p.schema();
 	}
 
 	@Override
 	public Histogram histogram() {
-		return dummy_hist;
+		return p.histogram();
 	}
 
 	@Override
 	public long recordsOutput() {
-		return dummy_recordsOutput;
+		return (long) histogram().recordsOutput();
 	}
 }
