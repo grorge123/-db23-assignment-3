@@ -271,6 +271,7 @@ public class VanillaDb {
 	public static Planner newPlanner() {
 		QueryPlanner qplanner;
 		UpdatePlanner uplanner;
+		// Impl note: ExplainPlan is contructed in Planner constructor.
 
 		try {
 			qplanner = (QueryPlanner) queryPlannerCls.newInstance();
