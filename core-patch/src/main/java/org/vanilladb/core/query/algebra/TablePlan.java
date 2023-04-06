@@ -93,6 +93,12 @@ public class TablePlan implements Plan {
 	}
 
 	@Override
+	public ExplainTree explainTree() {
+		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
+		return ret;
+	}
+
+	@Override
 	public long recordsOutput() {
 		return (long) histogram().recordsOutput();
 	}

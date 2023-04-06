@@ -27,9 +27,8 @@ public class ExplainPlan implements Plan {
 	 */
 	@Override
 	public Scan open() {
-		Scan s = p.open();
-		// TODO: return new EaxplainScan(s, ???);
-		return s;
+		// TODO: return new ExplainScan(s, ???);
+		return new ExplainScan(p.open(), schema(), explainTree());
 	}
 
 	@Override
@@ -53,4 +52,7 @@ public class ExplainPlan implements Plan {
 	public long recordsOutput() {
 		return 1;
 	}
+
+	@Override
+	public ExplainTree explainTree() { return p.explainTree(); };
 }

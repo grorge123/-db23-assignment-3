@@ -228,7 +228,12 @@ public class Parser {
 	 */
 	public QueryData queryCommand() {
 		// TODO: match and eatKeyword explain, and then set 'isExplain'
-		boolean isExplainSQL = true; 
+		boolean isExplainSQL = false;
+		if(lex.matchKeyword("explain")) {
+			lex.eatKeyword("explain");
+			isExplainSQL = true;
+		}
+
 		lex.eatKeyword("select");
 		ProjectList projs = projectList();
 		lex.eatKeyword("from");
