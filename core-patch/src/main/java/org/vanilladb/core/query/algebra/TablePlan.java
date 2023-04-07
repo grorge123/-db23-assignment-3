@@ -94,7 +94,8 @@ public class TablePlan implements Plan {
 
 	@Override
 	public ExplainTree explainTree() {
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
+		String detail = "on (" + ti.tableName() +  ")";
+		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), detail, this.blocksAccessed(), this.recordsOutput());
 		return ret;
 	}
 
