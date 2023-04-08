@@ -129,6 +129,14 @@ public class ProductPlan implements Plan {
 		return hist;
 	}
 
+	@Override
+	public ExplainTree explainTree() {
+		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
+		ret.addChildren(p1.explainTree());
+		ret.addChildren(p2.explainTree());
+		return ret;
+	}
+
 	/**
 	 * Returns an estimate of the number of records in the query's output table.
 	 * 
