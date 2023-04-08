@@ -54,7 +54,7 @@ public class ExplainScan implements Scan {
 	}
 
 	private String generate() {
-		String ret = RecursiveGenerate(0, this.explain);
+		String ret = "\n" + RecursiveGenerate(0, this.explain);
 		ret = ret + "\nActual #recs: " + this.Records;
 		return ret;
 	}
