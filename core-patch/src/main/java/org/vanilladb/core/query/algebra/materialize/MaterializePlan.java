@@ -15,7 +15,9 @@
  *******************************************************************************/
 package org.vanilladb.core.query.algebra.materialize;
 
-import org.vanilladb.core.query.algebra.*;
+import org.vanilladb.core.query.algebra.Plan;
+import org.vanilladb.core.query.algebra.Scan;
+import org.vanilladb.core.query.algebra.UpdateScan;
 import org.vanilladb.core.sql.Schema;
 import org.vanilladb.core.storage.buffer.Buffer;
 import org.vanilladb.core.storage.metadata.statistics.Histogram;
@@ -101,14 +103,21 @@ public class MaterializePlan implements Plan {
 	}
 
 	@Override
-	public ExplainTree explainTree() {
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
-		ret.addChildren(p.explainTree());
-		return ret;
+	public long recordsOutput() {
+		return p.recordsOutput();
 	}
 
 	@Override
-	public long recordsOutput() {
-		return p.recordsOutput();
+	public String toString() {
+		String c = p.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("MaterializePlan: (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		;
+		return sb.toString();
 	}
 }

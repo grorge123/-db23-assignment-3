@@ -227,13 +227,11 @@ public class Parser {
 	 * Methods for parsing queries.
 	 */
 	public QueryData queryCommand() {
-		// TODO: match and eatKeyword explain, and then set 'isExplain'
-		boolean isExplainSQL = false;
-		if(lex.matchKeyword("explain")) {
+		boolean isExplain = false;
+		if (lex.matchKeyword("explain")) {
+			isExplain = true;
 			lex.eatKeyword("explain");
-			isExplainSQL = true;
 		}
-
 		lex.eatKeyword("select");
 		ProjectList projs = projectList();
 		lex.eatKeyword("from");
@@ -266,8 +264,8 @@ public class Parser {
 			sortFields = sortList.fieldList();
 			sortDirs = sortList.directionList();
 		}
-		return new QueryData(projs.asStringSet(), tables, pred,
-				groupFields, projs.aggregationFns(), sortFields, sortDirs, isExplainSQL);
+		return new QueryData(isExplain, projs.asStringSet(), tables, pred,
+				groupFields, projs.aggregationFns(), sortFields, sortDirs);
 	}
 
 	/*

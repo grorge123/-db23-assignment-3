@@ -129,14 +129,6 @@ public class ProductPlan implements Plan {
 		return hist;
 	}
 
-	@Override
-	public ExplainTree explainTree() {
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
-		ret.addChildren(p1.explainTree());
-		ret.addChildren(p2.explainTree());
-		return ret;
-	}
-
 	/**
 	 * Returns an estimate of the number of records in the query's output table.
 	 * 
@@ -145,5 +137,23 @@ public class ProductPlan implements Plan {
 	@Override
 	public long recordsOutput() {
 		return (long) histogram().recordsOutput();
+	}
+
+	@Override
+	public String toString() {
+		String c2 = p2.toString();
+		String[] cs2 = c2.split("\n");
+		String c1 = p1.toString();
+		String[] cs1 = c1.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->ProductPlan  (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		// right child
+		for (String child : cs2)
+			sb.append("\t").append(child).append("\n");
+		// left child
+		for (String child : cs1)
+			sb.append("\t").append(child).append("\n");
+		return sb.toString();
 	}
 }

@@ -93,14 +93,17 @@ public class TablePlan implements Plan {
 	}
 
 	@Override
-	public ExplainTree explainTree() {
-		String detail = "on (" + ti.tableName() +  ")";
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), detail, this.blocksAccessed(), this.recordsOutput());
-		return ret;
+	public long recordsOutput() {
+		return (long) histogram().recordsOutput();
 	}
 
 	@Override
-	public long recordsOutput() {
-		return (long) histogram().recordsOutput();
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("->TablePlan on (").append(ti.tableName())
+				.append(") (#blks=");
+		sb.append(blocksAccessed()).append(", #recs=").append(recordsOutput())
+				.append(")\n");
+		return sb.toString();
 	}
 }

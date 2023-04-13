@@ -373,15 +373,19 @@ public class SelectPlan extends ReduceRecordsPlan {
 	}
 
 	@Override
-	public ExplainTree explainTree() {
-		String str = "pred:(" + pred.toString() + ")";
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), str, this.blocksAccessed(), this.recordsOutput());
-		ret.addChildren(p.explainTree());
-		return ret;
+	public long recordsOutput() {
+		return (long) histogram().recordsOutput();
 	}
 
 	@Override
-	public long recordsOutput() {
-		return (long) histogram().recordsOutput();
+	public String toString() {
+		String c = p.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->SelectPlan pred:(" + pred.toString() + ") (#blks="
+				+ blocksAccessed() + ", #recs=" + recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		return sb.toString();
 	}
 }

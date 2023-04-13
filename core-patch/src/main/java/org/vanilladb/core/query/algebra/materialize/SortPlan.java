@@ -20,7 +20,10 @@ import static org.vanilladb.core.sql.RecordComparator.DIR_ASC;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vanilladb.core.query.algebra.*;
+import org.vanilladb.core.query.algebra.Plan;
+import org.vanilladb.core.query.algebra.Scan;
+import org.vanilladb.core.query.algebra.TableScan;
+import org.vanilladb.core.query.algebra.UpdateScan;
 import org.vanilladb.core.query.algebra.multibuffer.BufferNeeds;
 import org.vanilladb.core.sql.RecordComparator;
 import org.vanilladb.core.sql.Schema;
@@ -132,13 +135,6 @@ public class SortPlan implements Plan {
 	@Override
 	public Histogram histogram() {
 		return p.histogram();
-	}
-
-	@Override
-	public ExplainTree explainTree() {
-		ExplainTree ret = new ExplainTree(this.getClass().getSimpleName(), null, this.blocksAccessed(), this.recordsOutput());
-		ret.addChildren(p.explainTree());
-		return ret;
 	}
 
 	@Override
@@ -300,5 +296,19 @@ public class SortPlan implements Plan {
 		for (String fldname : schema.fields())
 			dest.setVal(fldname, src.getVal(fldname));
 		return src.next();
+	}
+
+	@Override
+	public String toString() {
+		String c = p.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("SortPlan (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		;
+		return sb.toString();
 	}
 }
